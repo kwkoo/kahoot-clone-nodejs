@@ -39,6 +39,7 @@ oc set volume \
 oc new-app \
   -n $PROJ \
   --name quiz \
+  --context-dir=src \
   -e MONGO_URL="mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/kahootDB" \
   nodejs~https://github.com/kwkoo/kahoot-clone-nodejs.git
 
