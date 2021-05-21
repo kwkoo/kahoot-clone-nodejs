@@ -16,9 +16,12 @@ socket.on('showGamePin', function(data){
    let url = document.location.protocol + "//" + document.location.host + "?pin=" + data.pin;
    var qr = new QRious({
        element: document.getElementById("qr"),
-       size: 500,
+       size: 300,
        value: url
    });
+   var anchor = document.getElementById("gameanchor");
+   anchor.text = url;
+   andhor.href = url;
 });
 
 //Adds player's name to screen and updates player count
