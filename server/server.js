@@ -88,6 +88,13 @@ io.on('connection', (socket) => {
     
                 var dbo = db.db('kahootDB');
                 var query = { id:  parseInt(gameid)};
+                dbo.collection("kahootGames").findOne(query).then(function(err, res) {
+                    if (err) throw err;
+
+                    var numQuestions = res.questions.length;
+                    console.log("number of questions " + numQuestions);
+                    socket.emit('numQuestions', { count: numQuestions });
+                });
                 dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                     if (err) throw err;
                     
