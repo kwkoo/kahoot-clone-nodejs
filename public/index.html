@@ -6,7 +6,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body>
+    <body onload="extractPin()">
         <h1 id = "title">Join a Game</h1>
         <form action="/player/">
                 <div class="form-field">
@@ -25,5 +25,14 @@
         </form>
         <br/>
         <center><a href = "/create/" id = "host">Click here to host a Kahoot!</a></center>
+        <script>
+            function extractPin() {
+                let params = (new URL(document.location)).searchParams;
+                let pin = params.get("pin");
+                if (pin != null) {
+                    document.getElementById("pin").value = pin;
+                }
+            }
+        </script>
     </body>
 </html>
