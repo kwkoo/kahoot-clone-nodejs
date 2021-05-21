@@ -6,8 +6,6 @@ var timer;
 
 var time = 20;
 
-var numQuestions = 1;
-
 //When host connects to server
 socket.on('connect', function() {
     
@@ -19,12 +17,10 @@ socket.on('noGameFound', function(){
    window.location.href = '../../';//Redirect user to 'join game' page
 });
 
-socket.on('numQuestions', function(data){
-    numQuestions = data.count;
-    console.log("numQuestions " + numQuestions);
-});
 
 socket.on('gameQuestions', function(data){
+    var questionNum = data.index + 1;
+    document.getElementById('questionNum').innerHTML = "Question " + questionNum + " / " + data.totalQuestions;
     document.getElementById('question').innerHTML = data.q1;
     document.getElementById('answer1').innerHTML = data.a1;
     document.getElementById('answer2').innerHTML = data.a2;

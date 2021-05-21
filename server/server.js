@@ -88,13 +88,6 @@ io.on('connection', (socket) => {
     
                 var dbo = db.db('kahootDB');
                 var query = { id:  parseInt(gameid)};
-                dbo.collection("kahootGames").findOne(query).then(function(err, res) {
-                    if (err) throw err;
-
-                    var numQuestions = res.questions.length;
-                    console.log("number of questions " + numQuestions);
-                    socket.emit('numQuestions', { count: numQuestions });
-                });
                 dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                     if (err) throw err;
                     
@@ -103,16 +96,19 @@ io.on('connection', (socket) => {
                     var answer2 = res[0].questions[0].answers[1];
                     var answer3 = res[0].questions[0].answers[2];
                     var answer4 = res[0].questions[0].answers[3];
+                    var totalQuestions = res[0].questions.length;
                     var correctAnswer = res[0].questions[0].correct;
                     
                     socket.emit('gameQuestions', {
+                        index: 0,
                         q1: question,
                         a1: answer1,
                         a2: answer2,
                         a3: answer3,
                         a4: answer4,
                         correct: correctAnswer,
-                        playersInGame: playerData.length
+                        playersInGame: playerData.length,
+                        totalQuestions: totalQuestions
                     });
                     db.close();
                 });
@@ -339,16 +335,19 @@ io.on('connection', (socket) => {
                         var answer2 = res[0].questions[questionNum].answers[1];
                         var answer3 = res[0].questions[questionNum].answers[2];
                         var answer4 = res[0].questions[questionNum].answers[3];
+                        var totalQuestions = res[0].questions.length;
                         var correctAnswer = res[0].questions[questionNum].correct;
 
                         socket.emit('gameQuestions', {
+                            index: questionNum,
                             q1: question,
                             a1: answer1,
                             a2: answer2,
                             a3: answer3,
                             a4: answer4,
                             correct: correctAnswer,
-                            playersInGame: playerData.length
+                            playersInGame: playerData.length,
+                            totalQuestions: totalQuestions
                         });
                         db.close();
                     }else{
