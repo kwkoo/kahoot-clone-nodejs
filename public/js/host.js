@@ -12,6 +12,13 @@ socket.on('connect', function() {
 
 socket.on('showGamePin', function(data){
    document.getElementById('gamePinText').innerHTML = data.pin;
+
+   let url = document.location.protocol + "//" + document.location.host + "?pin=" + data.pin;
+   var qr = new QRious({
+       element: document.getElementById("qr"),
+       size: 500,
+       value: url
+   });
 });
 
 //Adds player's name to screen and updates player count

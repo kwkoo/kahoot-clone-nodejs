@@ -8,6 +8,8 @@
     </head>
     <body>
         <button id = "cancel" onclick = "endGame()">Cancel Game</button>
+        <br/>
+        <canvas id="qr" style="display: block; margin-left: auto; margin-right: auto;"></canvas>
         <h2 id = "title">Join this Game using the Game Pin: </h2>
         <h1 id = "gamePinText"></h1>
         <textarea style = "width: 700px; height: 500px;" readonly id = 'players'></textarea>
@@ -18,6 +20,7 @@
         <script src = "../socket.io/socket.io.js"></script>
         <script src = "../js/libs/jqueryLibrary.js"></script>
         <script src = "../js/libs//deparam.js"></script>
+        <script src = "../js/libs/qrious.js"></script>
         <script src = "../js/host.js"></script>
     </body>
 </html>
