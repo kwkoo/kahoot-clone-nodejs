@@ -20,13 +20,14 @@ var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
 var url = process.env.MONGO_URL || "mongodb://mongodb:27017/";
 
+var port = process.env.PORT || 8080;
 
 
 app.use(express.static(publicPath));
 
-//Starting server on port 3000
-server.listen(3000, () => {
-    console.log("Server started on port 3000");
+//Starting server
+server.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
 
 //When a connection to server is made from client
