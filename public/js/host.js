@@ -21,7 +21,7 @@ socket.on('showGamePin', function(data){
    });
    var anchor = document.getElementById("gameanchor");
    anchor.text = url;
-   andhor.href = url;
+   anchor.href = url;
 });
 
 //Adds player's name to screen and updates player count
