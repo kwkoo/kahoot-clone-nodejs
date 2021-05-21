@@ -6,5 +6,6 @@ oc delete -n $PROJ all -l app=quiz
 oc delete -n $PROJ all -l app=mongodb
 oc delete -n $PROJ pvc mongodb
 oc delete -n $PROJ is mongodb
+oc delete -n $PROJ secret mongodb
 
 exit 0

@@ -1,3 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: mongodb
+  name: mongodb
+stringData:
+  USERNAME: quiz
+  PASSWORD: password
+  URL: 'mongodb://quiz:password@mongodb:27017/'
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +40,10 @@ spec:
           protocol: TCP
         env:
         - name: MONGO_URL
-          value: 'mongodb://quiz:password@mongodb:27017/'
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: URL
         resources: {}
 status: {}
 ---
@@ -84,9 +98,15 @@ spec:
           protocol: TCP
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
-          value: quiz
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: USERNAME
         - name: MONGO_INITDB_ROOT_PASSWORD
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: PASSWORD
         volumeMounts:
         - name: data
           mountPath: /data/db
