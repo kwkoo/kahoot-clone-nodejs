@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# This script imports the quizzes from the given file.
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 JSON_FILE"
+  exit 1
+fi
+
+INPUT="$1"
+
+PROJ="$(oc project -q)"
+MONGO_USER="quiz"
+MONGO_PASSWORD="password"
+
+cat $INPUT | oc rsh deploy/mongodb mongoimport -u $MONGO_USER -p $MONGO_PASSWORD -d kahootDB -c kahootGames

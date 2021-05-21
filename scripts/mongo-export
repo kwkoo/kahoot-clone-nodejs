@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This script exports the quizzes as JSON.
+
+PROJ="$(oc project -q)"
+MONGO_USER="quiz"
+MONGO_PASSWORD="password"
+
+oc rsh deploy/mongodb mongoexport -u $MONGO_USER -p $MONGO_PASSWORD -d kahootDB -c kahootGames --quiet

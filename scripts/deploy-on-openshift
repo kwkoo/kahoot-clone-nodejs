@@ -1,0 +1,63 @@
+#!/bin/bash
+
+PROJ="$(oc project -q)"
+MONGO_ADMIN_PASSWORD="password"
+MONGO_USER="quiz"
+MONGO_PASSWORD="password"
+
+cd `dirname $0`
+BASE=`pwd`/..
+cd - >> /dev/null
+
+set -e
+
+oc new-app \
+  -n $PROJ \
+  --name mongodb \
+  -i mongodb:latest \
+  -e MONGODB_ADMIN_PASSWORD="$MONGO_PASSWORD" \
+  -e MONGODB_USER="$MONGO_USER" \
+  -e MONGODB_PASSWORD="$MONGO_PASSWORD" \
+  -e MONGODB_DATABASE="kahootDB"
+
+oc set volume \
+  -n $PROJ \
+  deploy/mongodb \
+  --remove \
+  --name mongodb-volume-1
+
+oc set volume \
+  -n $PROJ \
+  deploy/mongodb \
+  --add \
+  --mount-path=/var/lib/mongodb/data \
+  --name=data \
+  -t pvc \
+  --claim-name=mongodb \
+  --claim-size=1Gi
+
+oc new-app \
+  -n $PROJ \
+  --name quiz \
+  -e MONGO_URL="mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/kahootDB" \
+  nodejs~https://github.com/kwkoo/kahoot-clone-nodejs.git
+
+oc expose -n $PROJ svc/quiz
+
+# Set labels and annotations for topology view
+oc label \
+  -n $PROJ \
+  deploy/quiz \
+  app.kubernetes.io/part-of=quiz
+
+oc label \
+  -n $PROJ \
+  deploy/mongodb \
+  app.kubernetes.io/part-of=quiz
+
+oc annotate \
+  -n $PROJ \
+  deploy/quiz \
+  app.openshift.io/connects-to='[{"apiVersion":"apps/v1","kind":"Deployment","name":"mongodb"}]'
+
+echo "app is now available at: http://$(oc get -n $PROJ route/quiz -o jsonpath='{.spec.host}')"
