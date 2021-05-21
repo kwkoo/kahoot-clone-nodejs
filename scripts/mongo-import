@@ -13,4 +13,11 @@ PROJ="$(oc project -q)"
 MONGO_USER="quiz"
 MONGO_PASSWORD="password"
 
+cat <<EOF | oc rsh deploy/mongodb mongo -u $MONGO_USER -p $MONGO_PASSWORD
+use kahootDB
+db.dropUser("$MONGO_USER")
+db.createUser({user: "$MONGO_USER", pwd: "$MONGO_PASSWORD", roles: ["readWrite", "dbAdmin"]})
+db.kahootGames.drop()
+EOF
+
 cat $INPUT | oc rsh deploy/mongodb mongoimport -u $MONGO_USER -p $MONGO_PASSWORD -d kahootDB -c kahootGames

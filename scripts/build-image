@@ -1,0 +1,15 @@
+#!/bin/bash
+
+IMAGE_NAME=ghcr.io/kwkoo/kahoot-clone
+TAG=0.1
+
+cd `dirname $0`
+BASE=`pwd`
+cd - >> /dev/null
+
+set -e
+
+docker build -t ${IMAGE_NAME}:${TAG} ${BASE}/..
+docker push ${IMAGE_NAME}:${TAG}
+docker tag ${IMAGE_NAME}:${TAG} ${IMAGE_NAME}:latest
+docker push ${IMAGE_NAME}:latest
