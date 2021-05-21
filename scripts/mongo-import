@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # This script imports the quizzes from the given file.
+#
+# Note: It removes all existing quizzes from the database before perofrming
+# the import.
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 JSON_FILE"
