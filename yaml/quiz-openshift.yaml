@@ -1,0 +1,170 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: mongodb
+  name: mongodb
+stringData:
+  USERNAME: quiz
+  PASSWORD: password
+  URL: 'mongodb://quiz:password@mongodb:27017/kahootDB'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"mongodb"}]'
+  creationTimestamp: null
+  labels:
+    app: quiz
+    app.kubernetes.io/part-of: quiz
+  name: quiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: quiz
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deployment: quiz
+    spec:
+      containers:
+      - image: ghcr.io/kwkoo/kahoot-clone:0.1
+        name: kahoot-clone
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: URL
+        resources: {}
+status: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: quiz
+  labels:
+    app: quiz
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    deployment: quiz
+  type: ClusterIP
+  sessionAffinity: None
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+    app.kubernetes.io/part-of: quiz
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: mongodb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deployment: mongodb
+    spec:
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mongodb
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/mongodb:latest
+        name: mongo
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        env:
+        - name: MONGODB_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: PASSWORD
+        - name: MONGODB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: USERNAME
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: PASSWORD
+        - name: MONGODB_DATABASE
+          value: kahootDB
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mongodb/data
+        resources: {}
+status: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  ports:
+    - name: 27017-tcp
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    deployment: mongodb
+  type: ClusterIP
+  sessionAffinity: None
+status: {}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+status: {}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: quiz
+  name: quiz
+spec:
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: quiz
+    weight: 100
+  wildcardPolicy: None
+status: {}

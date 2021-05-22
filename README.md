@@ -4,9 +4,7 @@
 
 1. Login to OpenShift by running `oc login`
 
-1. Run `oc apply -f yaml/quiz.yaml`
-
-1. Create a route: `oc expose svc/health`
+1. Run `oc apply -f yaml/quiz-openshift.yaml`
 
 To create a quiz, go to `http://HOSTNAME/create/`
 
@@ -14,13 +12,20 @@ If you wish to export your quiz, run: `scripts/mongo-export > quiz.json`
 
 To import a quiz, run: `scripts/mongo-import quiz.json`
 
-Note: The mongo deployment uses an image from Docker Hub. You may have to create a secret to get around Docker Hub's pull rate limit.
+
+### Installing on non-OpenShift Kubernetes
+
+Run: `kubectl apply -f yaml/quiz-k8s.yaml`
+
+Note: The mongo deployment uses an image from Docker Hub. You may have to create a secret to get around Docker Hub's pull rate limit. After you create the secret, modify the mongo Deployment in `yaml/quiz-k8s.yaml` and point the `imagePullSecrets` field to your new secret.
+
 
 ### Installing on OpenShift using Source to Image
 
 1. Login to OpenShift by running `oc login`
 
 1. Run `scripts/deploy-on-openshift`
+
 
 ### Building on the local machine
 

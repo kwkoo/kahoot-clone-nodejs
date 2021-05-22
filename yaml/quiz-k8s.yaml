@@ -89,6 +89,10 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: mongodb
+      # Create a docker registry secret for Docker Hub if you are hitting
+      # image pull rate limits
+      #imagePullSecrets:
+      #- name: docker-hub
       containers:
       - image: mongo:4.4.6
         name: mongo
