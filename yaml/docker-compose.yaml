@@ -1,0 +1,24 @@
+version: "3.5"
+
+services:
+
+  quiz:
+    container_name: quiz
+    image: "node:16-alpine3.11"
+    ports:
+      - 8080:8080
+    volumes:
+      - ../src:/usr/app
+    working_dir: /usr/app
+    command: "node server/server.js"
+    environment:
+      - MONGO_URL=mongodb://quiz:password@mongodb:27017/
+    depends_on:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: "mongo:4.4.6"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=quiz
+      - MONGO_INITDB_ROOT_PASSWORD=password
