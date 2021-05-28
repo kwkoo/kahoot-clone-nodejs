@@ -22,6 +22,29 @@ var url = process.env.MONGO_URL || "mongodb://mongodb:27017/";
 
 var port = process.env.PORT || 8080;
 
+var adminUser = process.env.ADMIN_USER || "";
+var adminPassword = process.env.ADMIN_PASSWORD || "";
+
+function basicAuth(req, res, next) {
+    // taken from https://stackoverflow.com/a/33905671
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const strauth = Buffer.from(b64auth, 'base64').toString();
+    const splitIndex = strauth.indexOf(':');
+    const login = strauth.substring(0, splitIndex);
+    const password = strauth.substring(splitIndex + 1);
+    if (login && password && login == adminUser && password == adminPassword) {
+        return next();
+    }
+
+    res.set('WWW-Authenticate', 'Basic realm="Quiz Admin"');
+    res.status(401).send('Authentication required');
+}
+
+if ((adminUser.length > 0) && (adminPassword.length > 0)) {
+    console.log('Implementing basic auth for admin pages');
+    app.get('/create/', basicAuth);
+    app.get('/js/create.js', basicAuth);
+}
 
 app.use(express.static(publicPath));
 
@@ -359,7 +382,7 @@ io.on('connection', (socket) => {
                         var fifth = {name: "", score: 0};
                         
                         for(var i = 0; i < playersInGame.length; i++){
-                            console.log(playersInGame[i].gameData.score);
+                            console.log(playersInGame[i].name + ': ' + playersInGame[i].gameData.score);
                             if(playersInGame[i].gameData.score > fifth.score){
                                 if(playersInGame[i].gameData.score > fourth.score){
                                     if(playersInGame[i].gameData.score > third.score){

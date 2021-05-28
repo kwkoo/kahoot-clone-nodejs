@@ -7,6 +7,16 @@ metadata:
 stringData:
   USERNAME: quiz
   PASSWORD: password
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: quiz
+  name: quiz
+stringData:
+  ADMIN_USER: admin
+  ADMIN_PASSWORD: myquizpassword
   URL: 'mongodb://quiz:password@mongodb:27017/'
 ---
 apiVersion: apps/v1
@@ -42,8 +52,18 @@ spec:
         - name: MONGO_URL
           valueFrom:
             secretKeyRef:
-              name: mongodb
+              name: quiz
               key: URL
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: quiz
+              key: ADMIN_USER
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: quiz
+              key: ADMIN_PASSWORD
         resources: {}
 status: {}
 ---

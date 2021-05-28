@@ -41,6 +41,8 @@ oc new-app \
   --name quiz \
   --context-dir=src \
   -e MONGO_URL="mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/kahootDB" \
+  -e ADMIN_USER="admin" \
+  -e ADMIN_PASSWORD="myquizpassword" \
   nodejs~https://github.com/kwkoo/kahoot-clone-nodejs.git
 
 oc expose -n $PROJ svc/quiz

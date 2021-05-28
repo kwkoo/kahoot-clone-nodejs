@@ -13,6 +13,8 @@ services:
     command: "node server/server.js"
     environment:
       - MONGO_URL=mongodb://quiz:password@mongodb:27017/
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=password
     depends_on:
       - mongodb
 
