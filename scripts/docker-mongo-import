@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# This script imports the quizzes from the given file.
+#
+# Note: It removes all existing quizzes from the database before perofrming
+# the import.
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 JSON_FILE"
+  exit 1
+fi
+
+INPUT="$1"
+
+MONGO_USER="quiz"
+MONGO_PASSWORD="password"
+
+cat <<EOF | docker exec -i mongodb mongo -u $MONGO_USER -p $MONGO_PASSWORD
+use kahootDB
+db.dropUser("$MONGO_USER")
+db.createUser({user: "$MONGO_USER", pwd: "$MONGO_PASSWORD", roles: ["readWrite", "dbAdmin"]})
+db.kahootGames.drop()
+EOF
+
+cat $INPUT | docker exec -i mongodb mongoimport -u $MONGO_USER -p $MONGO_PASSWORD -d kahootDB -c kahootGames
