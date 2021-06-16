@@ -157,6 +157,7 @@ socket.on('GameOver', function(data){
     document.getElementById('question').innerHTML = "GAME OVER";
     document.getElementById('playersAnswered').innerHTML = "";
 
+    document.getElementById('winnerTitle').innerHTML = "Top " + maxWinners + " Players"
     document.getElementById('winnerTitle').style.display = "block";
 
     var winnerCount = data.names.length;
