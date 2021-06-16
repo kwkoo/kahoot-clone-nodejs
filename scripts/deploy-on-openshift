@@ -4,6 +4,8 @@ PROJ="$(oc project -q)"
 MONGO_ADMIN_PASSWORD="password"
 MONGO_USER="quiz"
 MONGO_PASSWORD="password"
+KAHOOT_ADMIN_USER="admin"
+KAHOOT_ADMIN_PASSWORD="myquizpassword"
 
 cd `dirname $0`
 BASE=`pwd`/..
@@ -41,8 +43,8 @@ oc new-app \
   --name quiz \
   --context-dir=src \
   -e MONGO_URL="mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/kahootDB" \
-  -e ADMIN_USER="admin" \
-  -e ADMIN_PASSWORD="myquizpassword" \
+  -e ADMIN_USER="$KAHOOT_ADMIN_USER" \
+  -e ADMIN_PASSWORD="$KAHOOT_ADMIN_PASSWORD" \
   nodejs~https://github.com/kwkoo/kahoot-clone-nodejs.git
 
 oc expose -n $PROJ svc/quiz

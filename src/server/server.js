@@ -445,11 +445,8 @@ io.on('connection', (socket) => {
                         }
                         
                         io.to(game.pin).emit('GameOver', {
-                            num1: first.name,
-                            num2: second.name,
-                            num3: third.name,
-                            num4: fourth.name,
-                            num5: fifth.name
+                            names: [first.name, second.name, third.name, fourth.name, fifth.name],
+                            scores: [first.score, second.score, third.score, fourth.score, fifth.score]
                         });
                     }
                 });
