@@ -293,8 +293,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('time', function(data){
-        var time = data.time / 45;
-        time = time * 100;
+        var time = Math.round(data.time / 45 * 100);
         var playerid = data.player;
         var player = players.getPlayer(playerid);
         player.gameData.score += time;

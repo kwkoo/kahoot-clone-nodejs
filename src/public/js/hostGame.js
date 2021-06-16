@@ -4,6 +4,7 @@ var params = jQuery.deparam(window.location.search); //Gets the id from url
 
 var timer;
 
+const maxWinners = 3;
 const questionDuration = 45;
 var time = questionDuration;
 
@@ -156,7 +157,13 @@ socket.on('GameOver', function(data){
     document.getElementById('playersAnswered').innerHTML = "";
 
     document.getElementById('winnerTitle').style.display = "block";
-    for (var i=0; i<3; i++) {
+
+    var winnerCount = data.names.length;
+    if (winnerCount > maxWinners) {
+        winnerCount = maxWinners;
+    }
+
+    for (var i=0; i<winnerCount; i++) {
         var display = i+1;
         if (data.names[i].length > 0) {
             document.getElementById('winner' + display).style.display = "block";
