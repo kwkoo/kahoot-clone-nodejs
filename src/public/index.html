@@ -2,35 +2,36 @@
 <html>
     <head>
         <title>Join | KahootClone</title>
-        <link rel = "stylesheet" href = "css/index.css">
+        <link rel="stylesheet" href="css/index.css">
         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body onload="extractPin()">
-        <h1 id = "title">Join a Game</h1>
+        <img src="/images/Logo-RedHat-Hat-Color-RGB.png" width="77" height="58" style="float: right;"/>
+        <h1 id="title">Join a Game</h1>
         <form action="/player/">
                 <div class="form-field">
-                    <label id = "label">Display Name</label>
-                    <input id = "name" type = "text" name="name" autofocus/>
+                    <label id="label">Email Address</label>
+                    <input id="name" type="email" name="name" autofocus/>
                 </div>
                 <br>
                 <div class="form-field">
-                    <label id = "label">Game Pin</label>
-                    <input id = "pin" type="number" name="pin"/>
+                    <label id="label">Game Pin</label>
+                    <input id="pin" type="number" name="pin"/>
                 </div>
                 <br>
                 <div class="form-field">
-                    <button id = "joinButton">Join</button>
+                    <button id="joinButton">Join</button>
                 </div>
         </form>
         <br/>
-        <center><a href = "/create/" id = "host">Click here to host a Kahoot!</a></center>
+        <center><a href="/create/" id="host">Click here to host a Kahoot!</a></center>
         <script>
             function extractPin() {
-                let params = (new URL(document.location)).searchParams;
-                let pin = params.get("pin");
+                let params=(new URL(document.location)).searchParams;
+                let pin=params.get("pin");
                 if (pin != null) {
-                    document.getElementById("pin").value = pin;
+                    document.getElementById("pin").value=pin;
                 }
             }
         </script>
