@@ -5,8 +5,8 @@ var params = jQuery.deparam(window.location.search); //Gets the id from url
 var timer;
 
 const maxWinners = 3;
-const questionDuration = 45;
-var time = questionDuration;
+var questionDuration;
+var time;
 
 //When host connects to server
 socket.on('connect', function() {
@@ -23,6 +23,7 @@ socket.on('noGameFound', function(){
 
 socket.on('gameQuestions', function(data){
     var questionNum = data.index + 1;
+    questionDuration = data.questionDuration;
     document.getElementById('questionNum').innerHTML = "Question " + questionNum + " / " + data.totalQuestions;
     document.getElementById('question').innerHTML = data.q1;
     document.getElementById('answer1').innerHTML = data.a1;
@@ -176,6 +177,7 @@ socket.on('GameOver', function(data){
 socket.on('getTime', function(player){
     socket.emit('time', {
         player: player,
-        time: time
+        time: time,
+        questionDuration: questionDuration
     });
 });

@@ -64,3 +64,18 @@ body {
     font-size: 25px;
     font-family: 'Raleway', sans-serif;
 }
+
+#qr{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    clear: right;
+}
+
+.logo{
+    float: right;
+}
+
+.gameanchor{
+    text-align: center;
+}

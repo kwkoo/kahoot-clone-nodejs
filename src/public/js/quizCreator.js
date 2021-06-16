@@ -4,6 +4,7 @@ var questionNum = 1; //Starts at two because question 1 is already present
 function updateDatabase(){
     var questions = [];
     var name = document.getElementById('name').value;
+    var questionDuration = document.getElementById('questionDuration').value;
     for(var i = 1; i <= questionNum; i++){
         var question = document.getElementById('q' + i).value;
         var answer1 = document.getElementById(i + 'a1').value;
@@ -15,7 +16,7 @@ function updateDatabase(){
         questions.push({"question": question, "answers": answers, "correct": correct})
     }
     
-    var quiz = {id: 0, "name": name, "questions": questions};
+    var quiz = {id: 0, "name": name, "questionDuration": questionDuration, "questions": questions};
     socket.emit('newQuiz', quiz);
 }
 
@@ -115,12 +116,3 @@ function setBGColor(){
     var randColor = randomColor();
     document.getElementById('question-field').style.backgroundColor = randColor;
 }
-
-
-
-
-
-
-
-
-
