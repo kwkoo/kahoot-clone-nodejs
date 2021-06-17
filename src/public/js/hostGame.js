@@ -4,7 +4,9 @@ var params = jQuery.deparam(window.location.search); //Gets the id from url
 
 var timer;
 
-var time = 20;
+const maxWinners = 5;
+var questionDuration;
+var time;
 
 //When host connects to server
 socket.on('connect', function() {
@@ -13,6 +15,7 @@ socket.on('connect', function() {
     socket.emit('host-join-game', params);
 });
 
+
 socket.on('noGameFound', function(){
    window.location.href = '../../';//Redirect user to 'join game' page
 });
@@ -20,6 +23,7 @@ socket.on('noGameFound', function(){
 
 socket.on('gameQuestions', function(data){
     var questionNum = data.index + 1;
+    questionDuration = data.questionDuration;
     document.getElementById('questionNum').innerHTML = "Question " + questionNum + " / " + data.totalQuestions;
     document.getElementById('question').innerHTML = data.q1;
     document.getElementById('answer1').innerHTML = data.a1;
@@ -31,9 +35,11 @@ socket.on('gameQuestions', function(data){
     updateTimer();
 });
 
+
 socket.on('updatePlayersAnswered', function(data){
    document.getElementById('playersAnswered').innerHTML = "Players Answered " + data.playersAnswered + " / " + data.playersInGame; 
 });
+
 
 socket.on('questionOver', function(playerData, correct){
     clearInterval(timer);
@@ -120,12 +126,13 @@ function nextQuestion(){
     
     document.getElementById('playersAnswered').style.display = "block";
     document.getElementById('timerText').style.display = "block";
-    document.getElementById('num').innerHTML = " 20";
+    document.getElementById('num').innerHTML = " " + questionDuration;
     socket.emit('nextQuestion'); //Tell server to start new question
 }
 
 function updateTimer(){
-    time = 20;
+    time = questionDuration;
+    document.getElementById('num').textContent = " " + time;
     timer = setInterval(function(){
         time -= 1;
         document.getElementById('num').textContent = " " + time;
@@ -150,8 +157,15 @@ socket.on('GameOver', function(data){
     document.getElementById('question').innerHTML = "GAME OVER";
     document.getElementById('playersAnswered').innerHTML = "";
 
+    document.getElementById('winnerTitle').innerHTML = "Top " + maxWinners + " Players"
     document.getElementById('winnerTitle').style.display = "block";
-    for (var i=0; i<5; i++) {
+
+    var winnerCount = data.names.length;
+    if (winnerCount > maxWinners) {
+        winnerCount = maxWinners;
+    }
+
+    for (var i=0; i<winnerCount; i++) {
         var display = i+1;
         if (data.names[i].length > 0) {
             document.getElementById('winner' + display).style.display = "block";
@@ -161,30 +175,10 @@ socket.on('GameOver', function(data){
 });
 
 
-
 socket.on('getTime', function(player){
     socket.emit('time', {
         player: player,
-        time: time
+        time: time,
+        questionDuration: questionDuration
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

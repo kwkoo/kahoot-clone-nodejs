@@ -115,6 +115,7 @@ io.on('connection', (socket) => {
                     if (err) throw err;
                     
                     var question = res[0].questions[0].question;
+                    var questionDuration = res[0].questionDuration;
                     var answer1 = res[0].questions[0].answers[0];
                     var answer2 = res[0].questions[0].answers[1];
                     var answer3 = res[0].questions[0].answers[2];
@@ -131,7 +132,8 @@ io.on('connection', (socket) => {
                         a4: answer4,
                         correct: correctAnswer,
                         playersInGame: playerData.length,
-                        totalQuestions: totalQuestions
+                        totalQuestions: totalQuestions,
+                        questionDuration: questionDuration
                     });
                     db.close();
                 });
@@ -293,8 +295,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('time', function(data){
-        var time = data.time / 20;
-        time = time * 100;
+        var time = Math.round(data.time / data.questionDuration * 100);
         var playerid = data.player;
         var player = players.getPlayer(playerid);
         player.gameData.score += time;
@@ -353,6 +354,7 @@ io.on('connection', (socket) => {
                     if(res[0].questions.length >= game.gameData.question){
                         var questionNum = game.gameData.question;
                         questionNum = questionNum - 1;
+                        var questionDuration = res[0].questionDuration;
                         var question = res[0].questions[questionNum].question;
                         var answer1 = res[0].questions[questionNum].answers[0];
                         var answer2 = res[0].questions[questionNum].answers[1];
@@ -370,7 +372,8 @@ io.on('connection', (socket) => {
                             a4: answer4,
                             correct: correctAnswer,
                             playersInGame: playerData.length,
-                            totalQuestions: totalQuestions
+                            totalQuestions: totalQuestions,
+                            questionDuration: questionDuration
                         });
                         db.close();
                     }else{
