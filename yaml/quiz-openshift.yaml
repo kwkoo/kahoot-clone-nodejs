@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - image: ghcr.io/kwkoo/kahoot-clone:0.1
-        name: kahoot-clone
+        name: quiz
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -111,7 +111,7 @@ spec:
           claimName: mongodb
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/openshift/mongodb:latest
-        name: mongo
+        name: mongodb
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 27017
