@@ -180,6 +180,9 @@ metadata:
     app: quiz
   name: quiz
 spec:
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
   port:
     targetPort: 8080-tcp
   to:
