@@ -42,7 +42,7 @@ spec:
         deployment: quiz
     spec:
       containers:
-      - image: ghcr.io/kwkoo/kahoot-clone:0.1
+      - image: ghcr.io/kwkoo/kahoot-clone:redhat
         name: kahoot-clone
         imagePullPolicy: IfNotPresent
         ports:
