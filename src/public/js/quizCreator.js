@@ -3,7 +3,11 @@ var questionNum = 1; //Starts at two because question 1 is already present
 
 function updateDatabase(){
     var questions = [];
-    var name = document.getElementById('name').value;
+    var name = document.getElementById('name').value.trim();
+    if (name.length == 0) {
+        alert('Quiz title cannot be blank');
+        return;
+    }
     var questionDuration = document.getElementById('questionDuration').value;
     for(var i = 1; i <= questionNum; i++){
         var question = document.getElementById('q' + i).value;

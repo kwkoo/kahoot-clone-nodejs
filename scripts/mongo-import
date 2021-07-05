@@ -2,7 +2,7 @@
 
 # This script imports the quizzes from the given file.
 #
-# Note: It removes all existing quizzes from the database before perofrming
+# Note: It removes all existing quizzes from the database before performing
 # the import.
 
 if [ $# -lt 1 ]; then
@@ -23,3 +23,9 @@ db.kahootGames.drop()
 EOF
 
 cat $INPUT | kubectl exec $(kubectl get po -o name -l deployment=mongodb) -i -- mongoimport -u $MONGO_USER -p $MONGO_PASSWORD -d kahootDB -c kahootGames
+
+# To delete a row, get a terminal in the mongo container,
+#
+# mongo -u ADMIN_USER -p ADMIN_PASSWORD kahootDB
+# db.kahootGames.find()
+# db.kahootGames.deleteOne({"id":ID_TO_DELETE})
