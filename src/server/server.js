@@ -12,6 +12,7 @@ const publicPath = path.join(__dirname, '../public');
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
+io.set("transports", ["websocket"]);
 var games = new LiveGames();
 var players = new Players();
 

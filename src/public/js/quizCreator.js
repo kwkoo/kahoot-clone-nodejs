@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({transports: ["websocket"], upgrade: false});
 var questionNum = 1; //Starts at two because question 1 is already present
 
 function updateDatabase(){

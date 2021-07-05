@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({transports: ["websocket"], upgrade: false});
 
 socket.on('connect', function(){
     socket.emit('requestDbNames');//Get database names to display to user
