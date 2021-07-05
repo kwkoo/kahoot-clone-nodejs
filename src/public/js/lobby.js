@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({transports: ["websocket"], upgrade: false});
 
 //When player connects to server
 socket.on('connect', function() {

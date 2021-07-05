@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({transports: ["websocket"], upgrade: false});
 var playerAnswered = false;
 var correct = false;
 var name;

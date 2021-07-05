@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({transports: ["websocket"], upgrade: false});
 var params = jQuery.deparam(window.location.search);
 
 //When host connects to server
