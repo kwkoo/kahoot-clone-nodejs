@@ -473,7 +473,7 @@ io.on('connection', (socket) => {
             if (err) throw err;
     
             var dbo = db.db('kahootDB');
-            dbo.collection("kahootGames").find().toArray(function(err, res) {
+            dbo.collection("kahootGames").find().sort({id: 1}).toArray(function(err, res) {
                 if (err) throw err;
                 socket.emit('gameNamesData', res);
                 db.close();
