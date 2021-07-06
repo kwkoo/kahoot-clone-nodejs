@@ -1,4 +1,6 @@
-var socket = io({transports: ["websocket"], upgrade: false});
+const pingInterval = 20000;
+
+var socket = io({transports: ["websocket", "polling"], upgrade: false, pingInterval: pingInterval});
 var questionNum = 1; //Starts at two because question 1 is already present
 
 function updateDatabase(){

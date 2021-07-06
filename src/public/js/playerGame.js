@@ -1,4 +1,6 @@
-var socket = io({transports: ["websocket"], upgrade: false});
+const pingInterval = 20000;
+
+var socket = io({transports: ["websocket", "polling"], upgrade: false, pingInterval: pingInterval});
 var playerAnswered = false;
 var correct = false;
 var name;

@@ -1,4 +1,6 @@
-var socket = io({transports: ["websocket"], upgrade: false});
+const pingInterval = 20000;
+
+var socket = io({transports: ["websocket", "polling"], upgrade: false, pingInterval: pingInterval});
 
 var params = jQuery.deparam(window.location.search); //Gets the id from url
 
