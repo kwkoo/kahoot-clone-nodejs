@@ -5,8 +5,10 @@ socket.on('connect', function(){
 });
 
 socket.on('gameNamesData', function(data){
+    var div = document.getElementById('game-list');
+    div.innerHTML = "";
+
     for(var i = 0; i < Object.keys(data).length; i++){
-        var div = document.getElementById('game-list');
         var button = document.createElement('button');
         
         button.innerHTML = data[i].name;
