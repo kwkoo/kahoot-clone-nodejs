@@ -255,6 +255,10 @@ io.on('connection', (socket) => {
     //Sets data in player class to answer from player
     socket.on('playerAnswer', function(num){
         var player = players.getPlayer(socket.id);
+        if (player == null) {
+            console.log("could not find player with socket ID " + socket.id);
+            return;
+        }
         var hostId = player.hostId;
         var playerNum = players.getPlayers(hostId);
         var game = games.getGame(hostId);
@@ -298,13 +302,22 @@ io.on('connection', (socket) => {
     
     socket.on('getScore', function(){
         var player = players.getPlayer(socket.id);
+        if (player == null) {
+            console.log("could not get player with socket ID " + socket.id);
+            return;
+        }
         socket.emit('newScore', player.gameData.score); 
     });
     
     socket.on('time', function(data){
         var time = Math.round(data.time / data.questionDuration * 100);
         var playerid = data.player;
+        if (playerid == null) { return; }
         var player = players.getPlayer(playerid);
+        if (player == null) {
+            console.log("could not find player with ID " + playerid);
+            return;
+        }
         player.gameData.score += time;
     });
     
@@ -312,6 +325,10 @@ io.on('connection', (socket) => {
     
     socket.on('timeUp', function(){
         var game = games.getGame(socket.id);
+        if (game == null) {
+            console.log("could not find game with socket ID " + socket.id);
+            return;
+        }
         game.gameData.questionLive = false;
         var playerData = players.getPlayers(game.hostId);
         
@@ -339,6 +356,10 @@ io.on('connection', (socket) => {
         }
         
         var game = games.getGame(socket.id);
+        if (game == null) {
+            console.log("could not get game with ID " + socket.id);
+            return;
+        }
         game.gameData.playersAnswered = 0;
         game.gameData.questionLive = true;
         game.gameData.question += 1;
@@ -459,6 +480,10 @@ io.on('connection', (socket) => {
     //When the host starts the game
     socket.on('startGame', () => {
         var game = games.getGame(socket.id);//Get the game based on socket.id
+        if (game == null) {
+            console.log("could not get game with ID " + socket.id);
+            return;
+        }
         game.gameLive = true;
         socket.emit('gameStarted', game.hostId);//Tell player and host that game has started
     });

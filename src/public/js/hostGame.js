@@ -25,7 +25,11 @@ socket.on('noGameFound', function(){
 
 socket.on('gameQuestions', function(data){
     var questionNum = data.index + 1;
-    questionDuration = data.questionDuration;
+    if (data.questionDuration) {
+        questionDuration = data.questionDuration;
+    } else {
+        questionDuration = 30;
+    }
     document.getElementById('questionNum').innerHTML = "Question " + questionNum + " / " + data.totalQuestions;
     document.getElementById('question').innerHTML = data.q1;
     document.getElementById('answer1').innerHTML = data.a1;
@@ -139,6 +143,7 @@ function updateTimer(){
         time -= 1;
         document.getElementById('num').textContent = " " + time;
         if(time == 0){
+            clearInterval(timer);
             socket.emit('timeUp');
         }
     }, 1000);
